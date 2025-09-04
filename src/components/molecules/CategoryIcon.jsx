@@ -1,6 +1,6 @@
-import React from "react"
-import ApperIcon from "@/components/ApperIcon"
-import { cn } from "@/utils/cn"
+import React from "react";
+import { cn } from "@/utils/cn";
+import ApperIcon from "@/components/ApperIcon";
 
 const CategoryIcon = ({ category, size = "md", className }) => {
   const iconMap = {
@@ -53,14 +53,20 @@ const CategoryIcon = ({ category, size = "md", className }) => {
     lg: "p-3"
   }
 
-  const iconSizes = {
+const iconSizes = {
     sm: "h-3 w-3",
     md: "h-4 w-4",
     lg: "h-5 w-5"
   }
 
-  const iconName = iconMap[category] || "MoreHorizontal"
-  const colorClass = colorMap[category] || "text-gray-600 bg-gray-50"
+  // Handle both string category names and category objects
+  // This prevents "Objects are not valid as a React child" errors
+  const categoryName = typeof category === 'string' 
+    ? category 
+    : category?.name || category?.Name || 'Other'
+
+  const iconName = iconMap[categoryName] || "MoreHorizontal"
+  const colorClass = colorMap[categoryName] || "text-gray-600 bg-gray-50"
 
   return (
     <div className={cn(
