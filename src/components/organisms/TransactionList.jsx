@@ -101,7 +101,7 @@ const TransactionList = ({ refreshTrigger, onEdit }) => {
                   <CategoryIcon category={transaction.category} size="lg" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium text-gray-900">{transaction.category}</p>
+<p className="font-medium text-gray-900">{typeof transaction.category === 'string' ? transaction.category : transaction.category?.name || 'Other'}</p>
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                         transaction.type === "income"
                           ? "bg-success text-green-800 bg-opacity-20"

@@ -61,9 +61,9 @@ const iconSizes = {
 
   // Handle both string category names and category objects
   // This prevents "Objects are not valid as a React child" errors
-  const categoryName = typeof category === 'string' 
+const categoryName = typeof category === 'string' 
     ? category 
-    : category?.name || category?.Name || 'Other'
+    : category?.name || 'Other'
 
   const iconName = iconMap[categoryName] || "MoreHorizontal"
   const colorClass = colorMap[categoryName] || "text-gray-600 bg-gray-50"
