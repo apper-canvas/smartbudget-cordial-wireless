@@ -10,8 +10,9 @@ import FormField from "@/components/molecules/FormField";
 import Button from "@/components/atoms/Button";
 
 const TransactionForm = ({ transaction, onSave, onCancel }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     type: "expense",
+    name: "",
     amount: "",
     category: "",
     date: formatDateInput(new Date()),
@@ -29,6 +30,7 @@ const TransactionForm = ({ transaction, onSave, onCancel }) => {
     if (transaction) {
 setFormData({
         type: transaction.type,
+        name: transaction.name || "",
         amount: transaction.amount.toString(),
         category: transaction.category,
         date: formatDateInput(transaction.date),
@@ -47,7 +49,11 @@ setFormData({
   }
 
   const validateForm = () => {
-    const newErrors = {}
+const newErrors = {}
+    
+    if (!formData.name.trim()) {
+      newErrors.name = "Please enter a transaction name"
+    }
     
     if (!formData.amount || parseFloat(formData.amount) <= 0) {
       newErrors.amount = "Please enter a valid amount"
@@ -77,7 +83,8 @@ setFormData({
 try {
       // Find category ID for lookup field
       const selectedCategory = categories.find(cat => cat.name === formData.category)
-      const transactionData = {
+const transactionData = {
+        name: formData.name.trim(),
         type: formData.type,
         amount: parseFloat(formData.amount),
         date: formData.date,
@@ -155,6 +162,17 @@ try {
             ))}
           </div>
         </div>
+
+{/* Transaction Name */}
+        <FormField
+          label="Transaction Name"
+          type="input"
+          placeholder="e.g., Grocery Shopping, Monthly Salary, Gas Station"
+          value={formData.name}
+          onChange={(e) => handleInputChange("name", e.target.value)}
+          error={errors.name}
+          className="mb-6"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Amount */}

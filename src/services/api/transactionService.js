@@ -43,8 +43,9 @@ class TransactionService {
       }
 
       // Transform database fields to UI format
-      return response.data.map(transaction => ({
+return response.data.map(transaction => ({
         Id: transaction.Id,
+        name: transaction.Name || "",
         type: transaction.type_c,
         amount: transaction.amount_c,
         date: transaction.date_c,
@@ -84,8 +85,9 @@ class TransactionService {
 
       // Transform database fields to UI format
       const transaction = response.data
-      return {
+return {
         Id: transaction.Id,
+        name: transaction.Name || "",
         type: transaction.type_c,
         amount: transaction.amount_c,
         date: transaction.date_c,
@@ -101,8 +103,8 @@ class TransactionService {
   async create(transactionData) {
     try {
       // Transform UI fields to database format - only Updateable fields
-      const dbData = {
-        Name: transactionData.description || `${transactionData.type} - ${transactionData.amount}`,
+const dbData = {
+        Name: transactionData.name || transactionData.description || `${transactionData.type} - ${transactionData.amount}`,
         type_c: transactionData.type,
         amount_c: parseFloat(transactionData.amount),
         date_c: transactionData.date,
@@ -137,7 +139,8 @@ class TransactionService {
           const created = successful[0].data
           // Transform back to UI format
           return {
-            Id: created.Id,
+Id: created.Id,
+            name: created.Name || "",
             type: created.type_c,
             amount: created.amount_c,
             date: created.date_c,
@@ -157,14 +160,14 @@ class TransactionService {
     try {
       // Transform UI fields to database format - only Updateable fields
       const dbData = {
-        Id: parseInt(id),
+Id: parseInt(id),
+        Name: transactionData.name || transactionData.description || `${transactionData.type} - ${transactionData.amount}`,
         type_c: transactionData.type,
         amount_c: parseFloat(transactionData.amount),
         date_c: transactionData.date,
         description_c: transactionData.description || "",
         category_c: parseInt(transactionData.category_c) || null
       }
-
       const params = {
         records: [dbData]
       }
@@ -193,6 +196,7 @@ class TransactionService {
           // Transform back to UI format
           return {
             Id: updated.Id,
+name: updated.Name || "",
             type: updated.type_c,
             amount: updated.amount_c,
             date: updated.date_c,
