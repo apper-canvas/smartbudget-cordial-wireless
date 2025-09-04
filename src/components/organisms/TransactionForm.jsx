@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react"
-import { motion } from "framer-motion"
-import { toast } from "react-toastify"
-import Button from "@/components/atoms/Button"
-import FormField from "@/components/molecules/FormField"
-import CategoryIcon from "@/components/molecules/CategoryIcon"
-import ApperIcon from "@/components/ApperIcon"
-import { transactionService } from "@/services/api/transactionService"
-import { categoryService } from "@/services/api/categoryService"
-import { formatDateInput } from "@/utils/date"
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { transactionService } from "@/services/api/transactionService";
+import { categoryService } from "@/services/api/categoryService";
+import { formatDateInput } from "@/utils/date";
+import ApperIcon from "@/components/ApperIcon";
+import CategoryIcon from "@/components/molecules/CategoryIcon";
+import FormField from "@/components/molecules/FormField";
+import Button from "@/components/atoms/Button";
 
 const TransactionForm = ({ transaction, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -27,7 +27,7 @@ const TransactionForm = ({ transaction, onSave, onCancel }) => {
 
   useEffect(() => {
     if (transaction) {
-      setFormData({
+setFormData({
         type: transaction.type,
         amount: transaction.amount.toString(),
         category: transaction.category,
@@ -74,13 +74,16 @@ const TransactionForm = ({ transaction, onSave, onCancel }) => {
 
     setIsSubmitting(true)
     
-    try {
+try {
+      // Find category ID for lookup field
+      const selectedCategory = categories.find(cat => cat.name === formData.category)
       const transactionData = {
-        ...formData,
+        type: formData.type,
         amount: parseFloat(formData.amount),
-        date: new Date(formData.date).toISOString()
+        date: formData.date,
+        description: formData.description,
+        category_c: selectedCategory?.Id || null
       }
-
       if (transaction) {
         await transactionService.update(transaction.Id, transactionData)
         toast.success("Transaction updated successfully!")
@@ -183,7 +186,7 @@ const TransactionForm = ({ transaction, onSave, onCancel }) => {
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
             {filteredCategories.map((category) => (
               <button
-                key={category.Id}
+key={category.Id}
                 type="button"
                 onClick={() => handleInputChange("category", category.name)}
                 className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${
